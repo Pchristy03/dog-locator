@@ -42,7 +42,10 @@
       "updated_data",
       JSON.stringify({ lat: data["lat"], lon: data["lon"] })
     );
-    const img = document.getElementById("mapImage");
-    img.src = "/static/map_copy.png?" + Date.now();
+    setTimeout(() => {    
+      const img = document.getElementById("mapImage");
+      img.src = "/static/map_copy.png?" + Date.now();
+      },1000)
+
   });
 </script>

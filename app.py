@@ -4,7 +4,7 @@ from flask import Flask, render_template
 from flask_socketio import SocketIO
 import json
 
-from serial import read_serial, simulate_info
+from serial_reader import read_serial, simulate_info
 
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins='*')
@@ -19,24 +19,21 @@ def main(coords):
     print("Pic locations: ", pic_location)
     cv2.imwrite("static/map_copy.png", map)
 
-    map_copy = cv2.imread("map_copy.png")
+    map_copy = cv2.imread("static/map_copy.png")
     cv2.circle(map_copy, pic_location, 5, (0, 255, 0), 2)
     cv2.imwrite("static/map_copy.png", map_copy)
 
 @socketio.on("connect")
 def socket_connected():
     print("Socket Connected!")
-    try:
-        socketio.start_background_task(lambda: simulate_info(socket=socketio))
-    except Exception as e:
-        print(f"Failure on socket connect: {e}")
+
 
 @socketio.on("updated_data")
 def updated_data(json_d):
     global lat
     global lon
 
-    print(json_d)
+    print("json_d: ", json_d)
     json_d = json.loads(json_d)
 
     lat = json_d["lat"]
@@ -51,7 +48,10 @@ def socket_connected():
 @app.route("/map", methods=["GET"])
 def map():
     global lat, lon
-    main((lat, lon))
+    try:
+        socketio.start_background_task(lambda: read_serial(socket=socketio))
+    except Exception as e:
+        print(f"Failure on socket connect: {e}")
     return render_template("index.html")
 
 
