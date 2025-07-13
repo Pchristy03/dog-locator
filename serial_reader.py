@@ -2,11 +2,10 @@ import serial
 import time
 import json
 import random
-from app import socketio as socket
 
 
 
-def read_serial():
+def read_serial(socket):
     received_data = False
     print("Creating Serial Port")
     ser = serial.Serial("/dev/serial0", baudrate=115200, timeout=1)
@@ -62,7 +61,7 @@ def read_serial():
         if not received_data:
             socket.emit("has_data", {"has_data": False})
 
-def simulate_info():
+def simulate_info(socket):
     while True:
         lat = random.uniform(40.786, 40.787)
         lon = random.uniform(-96.60745779,-96.6070000)   
