@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="data:," />
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+  </head>
+  <body>
+    <div class="d-flex justify-content-center align-items-center pt-5">
+      <img
+        id="mapImage"
+        src="{{ url_for('static', filename='map_copy.png') }}"
+      />
+    </div>
+  </body>
+</html>
+
+<script>
+  const socketio = io();
+  const socket = socketio.connect();
+
+  socket.on("connect", () => {
+    console.log("Socket connected to frontend successfully");
+  });
+
+  socket.on("serial", (data) => {
+    try {
+      data = JSON.parse(data);
+    } catch (e) {
+      console.log("failed to parse: " + data + " because: " + e);
+    }
+
+    if (data["lon"] && data["lat"]) {
+      console.log("Lat and Lon", data["lat"], data["lon"]);
+    }
+    socket.emit(
+      "updated_data",
+      JSON.stringify({ lat: data["lat"], lon: data["lon"] })
+    );
+    const img = document.getElementById("mapImage");
+    img.src = "/static/map_copy.png?" + Date.now();
+  });
+</script>
