@@ -11,11 +11,14 @@
     <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
   </head>
   <body>
-    <div class="d-flex justify-content-center align-items-center pt-5">
-      <img
-        id="mapImage"
-        src="{{ url_for('static', filename='map_copy.png') }}"
-      />
+    <div class="d-flex flex-column align-items-center pt-5">
+      <div id="statusDiv" class="text-center mb-3">No Data Received Yet ❌</div>
+      <div>
+        <img
+          id="mapImage"
+          src="{{ url_for('static', filename='map_copy.png') }}"
+        />
+      </div>
     </div>
   </body>
 </html>
@@ -42,10 +45,20 @@
       "updated_data",
       JSON.stringify({ lat: data["lat"], lon: data["lon"] })
     );
-    setTimeout(() => {    
+    setTimeout(() => {
       const img = document.getElementById("mapImage");
       img.src = "/static/map_copy.png?" + Date.now();
-      },1000)
+    }, 1000);
+  });
 
+  socket.on("has_data", (has_data) => {
+    console.log(has_data);
+    if (has_data) {
+      const infoDiv = document.getElementById("statusDiv");
+      infoDiv.innerText = "Receiving Data ✅";
+    } else {
+      const infoDiv = document.getElementById("statusDiv");
+      infoDiv.innerText = "No Data Received Yet ❌";
+    }
   });
 </script>

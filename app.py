@@ -49,7 +49,7 @@ def socket_connected():
 def map():
     global lat, lon
     try:
-        socketio.start_background_task(lambda: read_serial(socket=socketio))
+        socketio.start_background_task(lambda: simulate_info())
     except Exception as e:
         print(f"Failure on socket connect: {e}")
     return render_template("index.html")
