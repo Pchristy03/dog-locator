@@ -50,15 +50,15 @@ def socket_connected():
 def map():
     global lat, lon, is_running
 
-    print("Is Running?? => ", is_running)
+    print("********************************* Is Running?? => ", is_running)
     if not is_running:
         try:
             is_running = True
-            print("Is Running?? => ", is_running)
+            # print("Is Running?? => ", is_running)
             socketio.start_background_task(lambda: read_serial(socket=socketio))
         except Exception as e:
             is_running = False
-            print("Is Running?? => ", is_running)
+            # print("Is Running?? => ", is_running)
             print(f"Failure on socket connect: {e}")
     return render_template("index.html")
 
