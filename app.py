@@ -49,6 +49,7 @@ def socket_connected():
 @app.route("/map", methods=["GET"])
 def map():
     global lat, lon, is_running
+    print("Is Running?? => ", is_running)
     if not is_running:
         try:
             socketio.start_background_task(lambda: read_serial(socket=socketio))
