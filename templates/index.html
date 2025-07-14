@@ -51,11 +51,14 @@
     }, 1000);
   });
 
-  socket.on("has_data", (has_data) => {
-    console.log(has_data);
-    if (has_data) {
+  socket.on("has_data", (data) => {
+    console.log(data);
+    if (data.has_data) {
       const infoDiv = document.getElementById("statusDiv");
       infoDiv.innerText = "Receiving Data ✅";
+    } else if (data.lost_connection) {
+      const infoDiv = document.getElementById("statusDiv");
+      infoDiv.innerText = "Lost Connection ❌";
     } else {
       const infoDiv = document.getElementById("statusDiv");
       infoDiv.innerText = "No Data Received Yet ❌";

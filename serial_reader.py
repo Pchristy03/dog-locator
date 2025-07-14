@@ -7,6 +7,7 @@ import random
 
 def read_serial(socket):
     received_data = False
+    no_data_count = 0
     print("Creating Serial Port")
     ser = serial.Serial("/dev/serial0", baudrate=115200, timeout=1)
     time.sleep(2)
@@ -17,8 +18,14 @@ def read_serial(socket):
     time.sleep(3)
     print("Flushed Serial")
 
+
+
     while True:
         received_data = False
+
+        if (no_data_count > 3):
+            no_data_count = 0
+            socket.emit("has_data", {"lost_connection": True})
 
         line = ser.readline().decode().strip()
         ser.flush()
@@ -59,6 +66,7 @@ def read_serial(socket):
         time.sleep(3)
     
         if not received_data:
+            no_data_count = no_data_count + 1
             socket.emit("has_data", {"has_data": False})
 
 def simulate_info(socket):
