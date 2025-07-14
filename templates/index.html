@@ -59,7 +59,7 @@
     } else if (data.lost_connection) {
       const infoDiv = document.getElementById("statusDiv");
       infoDiv.innerText = "Lost Connection ❌";
-    } else if (!data.has_data) {
+    } else if (!data.has_data && !data.lost_connection) {
       const infoDiv = document.getElementById("statusDiv");
       infoDiv.innerText = "No Data Received Yet ❌";
     }

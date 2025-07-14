@@ -51,6 +51,7 @@ def read_serial(socket):
                         socket.emit("serial", json.dumps(location))
                         print("Emitting has_data:", {"has_data": True})
                         socket.emit("has_data", {"has_data": True})
+                        socket.emit("has_data", {"lost_connection": False})
                     else:
                         print(f"Invalid Lat and Lon: {lat_val}, {lon_val}")
 
