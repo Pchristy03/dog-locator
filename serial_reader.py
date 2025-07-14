@@ -65,7 +65,6 @@ def read_serial(socket):
     
         if not received_data:
             no_data_count = no_data_count + 1
-            socket.emit("has_data", {"has_data": False, "lost_connection": False})
 
 def simulate_info(socket):
     while True:
