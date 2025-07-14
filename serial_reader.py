@@ -25,7 +25,7 @@ def read_serial(socket):
 
         if (no_data_count > 3):
             no_data_count = 0
-            socket.emit("has_data", {"lost_connection": True})
+            socket.emit("has_data", {"has_data": False, "lost_connection": True})
 
         line = ser.readline().decode().strip()
         ser.flush()
@@ -48,9 +48,7 @@ def read_serial(socket):
                     if lat_val and lon_val:
                         location = {"lat": float(lat_val), "lon": float(lon_val)}
                         socket.emit("serial", json.dumps(location))
-                        print("Emitting has_data:", {"has_data": True})
-                        socket.emit("has_data", {"has_data": True})
-                        socket.emit("has_data", {"lost_connection": False})
+                        socket.emit("has_data", {"has_data": True, "lost_connection": False})
                     else:
                         print(f"Invalid Lat and Lon: {lat_val}, {lon_val}")
 
@@ -67,7 +65,7 @@ def read_serial(socket):
     
         if not received_data:
             no_data_count = no_data_count + 1
-            socket.emit("has_data", {"has_data": False})
+            socket.emit("has_data", {"has_data": False, "lost_connection": False})
 
 def simulate_info(socket):
     while True:
