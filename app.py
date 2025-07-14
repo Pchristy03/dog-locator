@@ -10,6 +10,7 @@ app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins='*')
 lat = 0
 lon = 0
+is_running = False
 
 def main(coords):
     map = cv2.imread("somerset.png")
@@ -47,11 +48,14 @@ def socket_connected():
 
 @app.route("/map", methods=["GET"])
 def map():
-    global lat, lon
-    try:
-        socketio.start_background_task(lambda: read_serial(socket=socketio))
-    except Exception as e:
-        print(f"Failure on socket connect: {e}")
+    global lat, lon, is_running
+    if not is_running:
+        try:
+            socketio.start_background_task(lambda: read_serial(socket=socketio))
+            is_running = True
+        except Exception as e:
+            is_running = False
+            print(f"Failure on socket connect: {e}")
     return render_template("index.html")
 
 
