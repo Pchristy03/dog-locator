@@ -33,32 +33,28 @@ def read_serial(socket):
         ser.flush()
 
         if len(line) != 0:
-            print(line)
             try:
                 open_b = line.index("{")
                 closed_b = line.index("}") + 1
-                j = line[open_b:closed_b]
-                print("j: ", j)
-                data = json.loads(j)
+                data = json.loads(line[open_b:closed_b])
 
-                if "lat" in data:
+                if "lat" in data and "lon" in data:
                     received_data = True
                     lat_val = data["lat"]
                     lon_val = data["lon"]
 
-                    print("Lat and long: ", lat_val, lon_val)
                     if lat_val and lon_val:
                         location = {"lat": float(lat_val), "lon": float(lon_val)}
                         socket.emit("serial", json.dumps(location))
                         socket.emit("has_data", {"has_data": True, "lost_connection": False})
+                        update_image((lat_val, lon_val))
+                        socket.emit("updated_image", location)
+                        no_data_count = 0
                     else:
                         print(f"Invalid Lat and Lon: {lat_val}, {lon_val}")
 
                 if "info" in data:
                     received_data = True
-                    # socket.emit("updated_image", json.dumps(data))
-                    update_image((lat_val, lon_val))
-                    socket.emit("updated_image")
 
             except Exception as e:
                 print(f"Failed to parse location: {e}")
@@ -70,7 +66,7 @@ def read_serial(socket):
         if not received_data:
             no_data_count = no_data_count + 1
 
-def simulate_info(socket):
+def simulate_info():
     while True:
         lat = random.uniform(40.786, 40.787)
         lon = random.uniform(-96.60745779,-96.6070000)   

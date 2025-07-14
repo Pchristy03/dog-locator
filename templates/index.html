@@ -13,8 +13,10 @@
   <body>
     <div class="d-flex flex-column align-items-center pt-5">
       <div id="statusDiv" class="text-center mb-3">No Data Received Yet ❌</div>
+      <div id="locationDiv" class="text-center mb-3"></div>
       <div>
         <img
+          class="w-100 h-auto"
           id="mapImage"
           src="{{ url_for('static', filename='map_copy.png') }}"
         />
@@ -31,23 +33,26 @@
     console.log("Socket connected to frontend successfully");
   });
 
-  socket.on("updated_image", () => {
+  socket.on("updated_image", (location) => {
+    const locationDiv = document.getElementById("locationDiv");
+    locationDiv.innerText = "Lat: " + location.lat + ", Lon: " + location.lon;
     const img = document.getElementById("mapImage");
     img.src = "/static/map_copy.png?" + Date.now();
   });
 
   socket.on("has_data", (data) => {
     console.log(data);
+    const locationDiv = document.getElementById("locationDiv");
+    const infoDiv = document.getElementById("statusDiv");
     if (data.has_data && !data.lost_connection) {
-      const infoDiv = document.getElementById("statusDiv");
       infoDiv.innerText = "Receiving Data ✅";
     }
     if (data.lost_connection) {
-      const infoDiv = document.getElementById("statusDiv");
+      locationDiv.innerText = "";
       infoDiv.innerText = "Lost Connection ❌";
     }
     if (!data.has_data && !data.lost_connection) {
-      const infoDiv = document.getElementById("statusDiv");
+      locationDiv.innerText = "";
       infoDiv.innerText = "No Data Received Yet ❌";
     }
   });
