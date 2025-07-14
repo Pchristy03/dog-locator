@@ -47,7 +47,7 @@ def read_serial(socket):
                         location = {"lat": float(lat_val), "lon": float(lon_val)}
                         socket.emit("serial", json.dumps(location))
                         socket.emit("has_data", {"has_data": True, "lost_connection": False})
-                        update_image((lat_val, lon_val))
+                        update_image((float(lat_val), float(lon_val)))
                         socket.emit("updated_image", location)
                         no_data_count = 0
                     else:
