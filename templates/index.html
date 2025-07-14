@@ -56,10 +56,12 @@
     if (data.has_data) {
       const infoDiv = document.getElementById("statusDiv");
       infoDiv.innerText = "Receiving Data ✅";
-    } else if (data.lost_connection) {
+    }
+    if (data.lost_connection) {
       const infoDiv = document.getElementById("statusDiv");
       infoDiv.innerText = "Lost Connection ❌";
-    } else if (!data.has_data && !data.lost_connection) {
+    }
+    if (!data.has_data && !data.lost_connection) {
       const infoDiv = document.getElementById("statusDiv");
       infoDiv.innerText = "No Data Received Yet ❌";
     }
