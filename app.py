@@ -49,13 +49,16 @@ def socket_connected():
 @app.route("/map", methods=["GET"])
 def map():
     global lat, lon, is_running
+
     print("Is Running?? => ", is_running)
     if not is_running:
         try:
-            socketio.start_background_task(lambda: read_serial(socket=socketio))
             is_running = True
+            print("Is Running?? => ", is_running)
+            socketio.start_background_task(lambda: read_serial(socket=socketio))
         except Exception as e:
             is_running = False
+            print("Is Running?? => ", is_running)
             print(f"Failure on socket connect: {e}")
     return render_template("index.html")
 
