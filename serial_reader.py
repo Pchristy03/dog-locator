@@ -45,8 +45,7 @@ def read_serial(socket):
                     lon_val = data["lon"]
 
                     print("Lat and long: ", lat_val, lon_val)
-                    if lat_val != -1 and lon_val != -1:
-
+                    if lat_val and lon_val:
                         location = {"lat": float(lat_val), "lon": float(lon_val)}
                         socket.emit("serial", json.dumps(location))
                         print("Emitting has_data:", {"has_data": True})

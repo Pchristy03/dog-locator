@@ -53,7 +53,7 @@
 
   socket.on("has_data", (data) => {
     console.log(data);
-    if (data.has_data) {
+    if (data.has_data && !data.lost_connection) {
       const infoDiv = document.getElementById("statusDiv");
       infoDiv.innerText = "Receiving Data ✅";
     }
