@@ -3,6 +3,8 @@ import time
 import json
 import random
 
+from map_processor import update_image
+
 
 
 def read_serial(socket):
@@ -54,7 +56,9 @@ def read_serial(socket):
 
                 if "info" in data:
                     received_data = True
-                    socket.emit("serial", json.dumps(data))
+                    # socket.emit("updated_image", json.dumps(data))
+                    update_image((lat_val, lon_val))
+                    socket.emit("updated_image")
 
             except Exception as e:
                 print(f"Failed to parse location: {e}")
@@ -75,7 +79,6 @@ def simulate_info(socket):
             "lat": lat,
             "lon": lon,
         }) 
+        update_image(data)
 
-        socket.emit("serial", data)
-
-        time.sleep(2)
+        time.sleep(4)

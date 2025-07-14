@@ -1,8 +1,5 @@
-from map_processor import get_coord_pixel_location
-import cv2
 from flask import Flask, render_template
 from flask_socketio import SocketIO
-import json
 
 from serial_reader import read_serial, simulate_info
 
@@ -12,34 +9,22 @@ lat = 0
 lon = 0
 is_running = False
 
-def main(coords):
-    map = cv2.imread("somerset.png")
-    print("Coords: ", coords)
-    #40.78647490131012, -96.60745776292396
-    pic_location = get_coord_pixel_location(coords[0], coords[1])
-    print("Pic locations: ", pic_location)
-    cv2.imwrite("static/map_copy.png", map)
-
-    map_copy = cv2.imread("static/map_copy.png")
-    cv2.circle(map_copy, pic_location, 5, (0, 255, 0), 2)
-    cv2.imwrite("static/map_copy.png", map_copy)
-
 @socketio.on("connect")
 def socket_connected():
     print("Socket Connected!")
 
 
-@socketio.on("updated_data")
-def updated_data(json_d):
-    global lat
-    global lon
+# @socketio.on("updated_data")
+# def updated_data(json_d):
+#     global lat
+#     global lon
 
-    print("json_d: ", json_d)
-    json_d = json.loads(json_d)
+#     print("json_d: ", json_d)
+#     json_d = json.loads(json_d)
 
-    lat = json_d["lat"]
-    lon = json_d["lon"]
-    main((lat, lon))
+#     lat = json_d["lat"]
+#     lon = json_d["lon"]
+#     update_image((lat, lon))
 
 
 @socketio.on("disconnect")

@@ -31,24 +31,9 @@
     console.log("Socket connected to frontend successfully");
   });
 
-  socket.on("serial", (data) => {
-    try {
-      data = JSON.parse(data);
-    } catch (e) {
-      console.log("failed to parse: " + data + " because: " + e);
-    }
-
-    if (data["lon"] && data["lat"]) {
-      console.log("Lat and Lon", data["lat"], data["lon"]);
-    }
-    socket.emit(
-      "updated_data",
-      JSON.stringify({ lat: data["lat"], lon: data["lon"] })
-    );
-    setTimeout(() => {
-      const img = document.getElementById("mapImage");
-      img.src = "/static/map_copy.png?" + Date.now();
-    }, 1000);
+  socket.on("updated_image", () => {
+    const img = document.getElementById("mapImage");
+    img.src = "/static/map_copy.png?" + Date.now();
   });
 
   socket.on("has_data", (data) => {

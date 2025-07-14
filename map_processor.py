@@ -21,3 +21,15 @@ def get_coord_pixel_location(lat, lon):
     Y = (top_lat - lat) / (top_lat - bottom_lat) * image_size[0]
 
     return (int(X), int(Y))
+
+def update_image(coords):
+    map = cv2.imread("somerset.png")
+    print("Coords: ", coords)
+    #40.78647490131012, -96.60745776292396
+    pic_location = get_coord_pixel_location(coords[0], coords[1])
+    print("Pic locations: ", pic_location)
+    cv2.imwrite("static/map_copy.png", map)
+
+    map_copy = cv2.imread("static/map_copy.png")
+    cv2.circle(map_copy, pic_location, 5, (0, 255, 0), 2)
+    cv2.imwrite("static/map_copy.png", map_copy)
