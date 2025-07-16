@@ -11,7 +11,7 @@ def read_serial(socket):
     received_data = False
     no_data_count = 0
     print("Creating Serial Port")
-    ser = serial.Serial("/dev/serial0", baudrate=115200, timeout=1)
+    ser = serial.Serial("/dev/ttyUSB0", baudrate=115200, timeout=1)
     time.sleep(2)
 
     ser.reset_input_buffer()
