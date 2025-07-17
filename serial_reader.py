@@ -20,8 +20,6 @@ def read_serial(socket):
     time.sleep(3)
     print("Flushed Serial")
 
-
-
     while True:
         received_data = False
 

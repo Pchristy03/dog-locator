@@ -13,20 +13,6 @@ is_running = False
 def socket_connected():
     print("Socket Connected!")
 
-
-# @socketio.on("updated_data")
-# def updated_data(json_d):
-#     global lat
-#     global lon
-
-#     print("json_d: ", json_d)
-#     json_d = json.loads(json_d)
-
-#     lat = json_d["lat"]
-#     lon = json_d["lon"]
-#     update_image((lat, lon))
-
-
 @socketio.on("disconnect")
 def socket_connected():
     print("Socket Disconnected!")
@@ -39,11 +25,9 @@ def map():
     if not is_running:
         try:
             is_running = True
-            # print("Is Running?? => ", is_running)
             socketio.start_background_task(lambda: read_serial(socket=socketio))
         except Exception as e:
             is_running = False
-            # print("Is Running?? => ", is_running)
             print(f"Failure on socket connect: {e}")
     return render_template("index.html")
 
